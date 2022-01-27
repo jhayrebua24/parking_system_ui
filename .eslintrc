@@ -26,6 +26,7 @@
   ],
   "plugins": ["react", "jsx-a11y", "import", "prettier", "@typescript-eslint"],
   "rules": {
+    "import/prefer-default-export": "off",
     "react/jsx-uses-react": "off",
     "react/react-in-jsx-scope": "off",
     // prettier
@@ -70,8 +71,9 @@
   "settings": {
     "import/resolver": {
       "node": {
-        "paths": ["src"],
-        "extensions": [".js", ".ts", ".jsx", ".tsx", ".json"]
+        "paths": ["src/"],
+        "extensions": [".js", ".ts", ".jsx", ".tsx", ".json"],
+        "moduleDirectory": ["node_modules", "src/"]
       }
     },
     "import/extensions": [".js", ".ts", ".mjs", ".jsx", ".tsx"]

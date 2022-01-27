@@ -1,0 +1,1 @@
+export const PARKING_LOT_LIST = "PARKINGLOT/LIST";
