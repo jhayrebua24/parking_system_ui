@@ -25,8 +25,11 @@ const useHandleErrors = (): ((key: any | unknown | DynamicObject) => void) => {
             "Unprocessable request"
         );
       }
+
+      Promise.reject(message);
     } else {
       toastError("Failed to connect to web service");
+      Promise.reject(new Error("Failed to connect"));
     }
   };
 

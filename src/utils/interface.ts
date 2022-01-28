@@ -12,9 +12,7 @@ export interface DynamicObject {
 export type FetchDataInterface<Type> = [Type, boolean, UseQueryResult];
 
 export interface RequestResponse<T> {
-  data: {
-    data: T;
-    message?: string;
-    [key: string]: any;
-  };
+  data: T;
 }
+
+export type IMutate = [(key: any) => Promise<any>, boolean];

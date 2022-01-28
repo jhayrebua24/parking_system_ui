@@ -28,16 +28,17 @@ axios.defaults.headers = {
 
 const colors = {
   brand: {
-    "50": "#FFFFFF",
-    "100": "#FFFFFF",
-    "200": "#EBEFFF",
-    "300": "#B8C5FF",
-    "400": "#859BFF",
-    "500": "#5271FF",
-    "600": "#1F47FF",
-    "700": "#002AEB",
-    "800": "#0021B8",
-    "900": "#001885",
+    DEFAULT: "#FDC12A",
+    "50": "#FFF6E0",
+    "100": "#FFF0CC",
+    "200": "#FEE4A3",
+    "300": "#FED97B",
+    "400": "#FDCD52",
+    "500": "#FDC12A",
+    "600": "#EDAA02",
+    "700": "#B58202",
+    "800": "#7E5A01",
+    "900": "#463201",
   },
 };
 const theme = extendTheme({ colors });
