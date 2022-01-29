@@ -9,7 +9,7 @@ interface IProps {
   onClose: () => void;
 }
 
-const SelectOpt = [...Array(6)].map((_v, k) => ({
+const SelectOpt = [...Array(4)].map((_v, k) => ({
   value: k + 5,
   label: k + 5,
 }));
