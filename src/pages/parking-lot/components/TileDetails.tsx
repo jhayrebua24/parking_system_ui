@@ -85,7 +85,11 @@ function TileDetails({
       return;
     }
 
-    if (isMaxEntryPoint) {
+    if (
+      isMaxEntryPoint &&
+      selectionMethod === ENTRANCE &&
+      data?.can_be_entrance
+    ) {
       toastError("Failed to add more entrances");
       return;
     }
