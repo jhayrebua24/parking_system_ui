@@ -1,8 +1,10 @@
 import { Button } from "@chakra-ui/react";
+import { useOpenModal } from "hooks/useModal";
 import { Children, useEffect, useMemo, useState } from "react";
 import { Params, useParams } from "react-router-dom";
 import { ENTRANCE, OBSTACLE, SLOT } from "../constants";
 import { useParkingLotContext } from "../context";
+import AddParkingEntrance from "../forms/AddParkingEntrance";
 import { useAddObstacles } from "../hooks";
 import TileDetails from "./TileDetails";
 
@@ -23,6 +25,7 @@ function TilesList(): JSX.Element {
     handleSelect,
   } = useParkingLotContext();
   const { parkingId } = useParams<Params>();
+  const openModal = useOpenModal();
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const [addObstacle] = useAddObstacles(parkingId || "");
   const entranceLength = useMemo<number>(
@@ -42,15 +45,22 @@ function TilesList(): JSX.Element {
           await addObstacle({
             tile_ids: selectedIds,
           });
-          handleCancel();
-        } catch (_e) {
+        } finally {
           handleCancel();
         }
       },
       [ENTRANCE]: () =>
-        addObstacle({
-          tile_ids: selectedIds,
-        }), // to change
+        openModal({
+          title: `Add Parking Entry`,
+          content: (close) => (
+            <AddParkingEntrance
+              parkingId={parkingId || ""}
+              onClose={close}
+              callback={handleCancel}
+              ids={selectedIds}
+            />
+          ),
+        }),
       [SLOT]: () =>
         addObstacle({
           tile_ids: selectedIds,
@@ -59,13 +69,14 @@ function TilesList(): JSX.Element {
         handleCancel();
       },
     }),
-    [addObstacle, handleCancel, selectedIds]
+    [addObstacle, handleCancel, selectedIds, openModal, parkingId]
   );
 
   useEffect(() => {
     if (selectionMethod === "default") setSelectedIds([]);
   }, [selectionMethod]);
 
+  const onClickSave = handleClick[selectionMethod] || handleClick.default;
   return (
     <>
       <div className="flex justify-between items-center">
@@ -76,9 +87,11 @@ function TilesList(): JSX.Element {
               <Button
                 type="button"
                 colorScheme="brand"
-                onClick={() =>
-                  handleClick[selectionMethod]() || handleClick.default()
-                }
+                disabled={selectedIds.length < 1}
+                onClick={() => {
+                  if (selectedIds.length < 1) return;
+                  onClickSave();
+                }}
               >
                 Save
               </Button>
@@ -92,6 +105,7 @@ function TilesList(): JSX.Element {
                 type="button"
                 colorScheme="blue"
                 onClick={handleSelect(ENTRANCE)}
+                disabled={isMaxEntryPoint}
               >
                 Add Entrance
               </Button>

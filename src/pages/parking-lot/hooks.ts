@@ -22,3 +22,18 @@ export const useAddObstacles = (id: string): IMutate => {
   );
   return [mutateAsync, isLoading];
 };
+
+export const useAddEntrances = (id: string): IMutate => {
+  const toastSuccess = useSuccessToast();
+  const query = useQueryClient();
+  const { mutateAsync, isLoading } = useMutation(
+    (payload) => axios.post(`/v1/parking-lot/${id}/entrance`, payload),
+    {
+      onSuccess: ({ data: { message } }) => {
+        toastSuccess(message || "Successfully added entrance");
+        query.invalidateQueries(`${PARKING_LOT_DETAILS}/${id}`);
+      },
+    }
+  );
+  return [mutateAsync, isLoading];
+};

@@ -39,6 +39,7 @@ function ParkingLot(): JSX.Element {
 
   const handleSelect = (method: MethodType) => (e: React.MouseEvent): void => {
     e.preventDefault();
+
     const setSelect = {
       [ENTRANCE]: setSelectingEntrance,
       [OBSTACLE]: setSelectObstacle,

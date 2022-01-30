@@ -2,6 +2,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import clsx from "clsx";
+import { useErrorToast } from "hooks/useCustomToast";
 import { useMemo } from "react";
 import { ENTRANCE, OBSTACLE, SLOT } from "../constants";
 import { useParkingLotContext } from "../context";
@@ -24,7 +25,7 @@ function TileDetails({
     selectionMethod,
     showSaveButton: isSelecting,
   } = useParkingLotContext();
-  //   console.log(selectedIds);
+  const toastError = useErrorToast();
   const className = useMemo(() => {
     if (selectedIds.includes(data?.id))
       return "bg-indigo-400 hover:bg-indigo-400";
@@ -84,7 +85,10 @@ function TileDetails({
       return;
     }
 
-    if (isMaxEntryPoint) return;
+    if (isMaxEntryPoint) {
+      toastError("Failed to add more entrances");
+      return;
+    }
     setSelectedIds((prev: number[]) => [...prev, data?.id]);
   };
 
