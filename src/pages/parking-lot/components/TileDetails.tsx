@@ -11,12 +11,14 @@ interface Props {
   data: ITileDetails;
   setSelectedIds: (key: any) => void;
   selectedIds: number[];
+  isMaxEntryPoint: boolean;
 }
 
 function TileDetails({
   data,
   selectedIds,
   setSelectedIds,
+  isMaxEntryPoint,
 }: Props): JSX.Element {
   const {
     selectionMethod,
@@ -82,6 +84,7 @@ function TileDetails({
       return;
     }
 
+    if (isMaxEntryPoint) return;
     setSelectedIds((prev: number[]) => [...prev, data?.id]);
   };
 

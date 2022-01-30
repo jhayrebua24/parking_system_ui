@@ -9,7 +9,7 @@ interface Props {
   handleCancel: () => void;
   handleSelect: (key: any) => (e: any) => void;
   showSaveButton: boolean;
-  data: IParkingLotDetails | null;
+  data: IParkingLotDetails;
 }
 
 export const ParkingLotContext = createContext<Props>({
@@ -22,7 +22,12 @@ export const ParkingLotContext = createContext<Props>({
     //
   },
   showSaveButton: false,
-  data: null,
+  data: {
+    id: 0,
+    name: "",
+    height: 0,
+    width: 0,
+  },
 });
 
 export const useParkingLotContext = (): Props => useContext(ParkingLotContext);

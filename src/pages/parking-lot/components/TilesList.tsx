@@ -25,6 +25,15 @@ function TilesList(): JSX.Element {
   const { parkingId } = useParams<Params>();
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const [addObstacle] = useAddObstacles(parkingId || "");
+  const entranceLength = useMemo<number>(
+    () => tilesData?.filter((td) => !!td.entrance_details)?.length || 0,
+    [tilesData]
+  );
+  // only allow 10% of total tiles for maximum entrance count. e.g 25 tiles = 2.5 round off to 3;
+  const isMaxEntryPoint = useMemo<boolean>(() => {
+    const maxEntryPoint = Math.ceil((data?.height * data?.width) / 10);
+    return entranceLength + selectedIds.length >= maxEntryPoint;
+  }, [entranceLength, selectedIds, data]);
 
   const handleClick: IHandleClick = useMemo(
     () => ({
@@ -117,6 +126,7 @@ function TilesList(): JSX.Element {
               selectedIds={selectedIds}
               setSelectedIds={setSelectedIds}
               data={tld}
+              isMaxEntryPoint={isMaxEntryPoint}
             />
           ))
         )}
