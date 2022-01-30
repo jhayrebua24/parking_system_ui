@@ -28,8 +28,9 @@ const useHandleErrors = (): ((key: any | unknown | DynamicObject) => void) => {
 
       Promise.reject(message);
     } else {
+      const message = "Failed to connect";
       toastError("Failed to connect to web service");
-      Promise.reject(new Error("Failed to connect"));
+      Promise.reject(message);
     }
   };
 

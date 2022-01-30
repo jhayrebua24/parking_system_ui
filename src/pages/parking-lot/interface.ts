@@ -28,3 +28,5 @@ export interface IParkingParams {
   data: IParkingLotDetails;
   tiles: ITileDetails[];
 }
+
+export type MethodType = "ENTRANCE" | "OBSTACLE" | "SLOT" | "default";
