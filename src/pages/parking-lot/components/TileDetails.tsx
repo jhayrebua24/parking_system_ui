@@ -20,12 +20,12 @@ function TileDetails({
 }: Props): JSX.Element {
   const {
     selectionMethod,
-    setSelectionTiles,
     showSaveButton: isSelecting,
   } = useParkingLotContext();
   //   console.log(selectedIds);
   const className = useMemo(() => {
-    if (selectedIds.includes(data?.id)) return "bg-indigo-400";
+    if (selectedIds.includes(data?.id))
+      return "bg-indigo-400 hover:bg-indigo-400";
     if (data?.slot_details) {
       if (data?.slot_details.is_occupied) return "bg-red-500";
       return "bg-green-500";
@@ -68,62 +68,20 @@ function TileDetails({
   const onClick = (e: React.MouseEvent) => {
     e.preventDefault();
     if (
-      selectedIds.includes(data?.id) ||
-      !availableForSelection ||
+      data?.slot_details ||
+      data?.is_obstacle ||
+      !data?.is_open_space ||
+      data?.is_entrance ||
+      (!data?.can_be_entrance && selectionMethod === ENTRANCE) ||
       !isSelecting
     )
       return;
-    const selectionFunctions: {
-      [OBSTACLE]: (prev: any) => void;
-      [ENTRANCE]: (prev: any) => void;
-      [SLOT]: (prev: any) => void;
-      default: (prev: any) => void;
-    } = {
-      [OBSTACLE]: (prev: any) => {
-        const newPrev: ITileDetails[] = [...prev];
-        const currentTileIndex = newPrev.findIndex((dt) => dt.id === data?.id);
-        if (currentTileIndex > -1) {
-          const tileDetails = newPrev[currentTileIndex];
-          newPrev[currentTileIndex] = {
-            ...tileDetails,
-            is_obstacle: true,
-            is_open_space: false,
-          };
-        }
-        return newPrev;
-      },
-      [ENTRANCE]: (prev: any) => {
-        const newPrev: ITileDetails[] = [...prev];
-        const currentTileIndex = newPrev.findIndex((dt) => dt.id === data?.id);
-        if (currentTileIndex > -1) {
-          const tileDetails = newPrev[currentTileIndex];
-          newPrev[currentTileIndex] = {
-            ...tileDetails,
-            is_obstacle: true,
-            is_open_space: false,
-          };
-        }
-        return newPrev;
-      },
-      [SLOT]: (prev: any) => {
-        const newPrev: ITileDetails[] = [...prev];
-        const currentTileIndex = newPrev.findIndex((dt) => dt.id === data?.id);
-        if (currentTileIndex > -1) {
-          const tileDetails = newPrev[currentTileIndex];
-          newPrev[currentTileIndex] = {
-            ...tileDetails,
-            is_obstacle: true,
-            is_open_space: false,
-          };
-        }
-        return newPrev;
-      },
-      default: (prev: any) => prev,
-    };
 
-    setSelectionTiles(
-      selectionFunctions[selectionMethod] || selectionFunctions.default
-    );
+    if (selectedIds.includes(data?.id) && isSelecting) {
+      setSelectedIds((prev: number[]) => prev.filter((id) => id !== data.id));
+      return;
+    }
+
     setSelectedIds((prev: number[]) => [...prev, data?.id]);
   };
 
@@ -131,10 +89,10 @@ function TileDetails({
     <div
       className={clsx(
         "flex-1 h-32 border border-gray-500 flex flex-col items-center justify-center",
-        className,
         isSelecting &&
           availableForSelection &&
-          "cursor-pointer bg-yellow-100 hover:bg-yellow-200"
+          "cursor-pointer bg-yellow-100 hover:bg-yellow-200",
+        className
       )}
       onClick={onClick}
     >

@@ -6,7 +6,6 @@ import { ITileDetails, MethodType } from "./interface";
 interface Props {
   tilesData: ITileDetails[] | undefined;
   selectionMethod: MethodType;
-  setSelectionTiles: (key: any) => void;
   handleCancel: () => void;
   handleSelect: (key: any) => (e: any) => void;
   showSaveButton: boolean;
@@ -16,9 +15,6 @@ interface Props {
 export const ParkingLotContext = createContext<Props>({
   tilesData: [],
   selectionMethod: "default",
-  setSelectionTiles: () => {
-    //
-  },
   handleCancel: () => {
     //
   },
