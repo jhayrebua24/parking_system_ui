@@ -27,7 +27,7 @@ function TilesList(): JSX.Element {
   const { parkingId } = useParams<Params>();
   const openModal = useOpenModal();
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
-  const [addObstacle] = useAddObstacles(parkingId || "");
+  const [addObstacle, loadingAddObstacle] = useAddObstacles(parkingId || "");
   const entranceLength = useMemo<number>(
     () => tilesData?.filter((td) => !!td.entrance_details)?.length || 0,
     [tilesData]
@@ -87,7 +87,8 @@ function TilesList(): JSX.Element {
               <Button
                 type="button"
                 colorScheme="brand"
-                disabled={selectedIds.length < 1}
+                disabled={selectedIds.length < 1 || loadingAddObstacle}
+                isLoading={loadingAddObstacle}
                 onClick={() => {
                   if (selectedIds.length < 1) return;
                   onClickSave();
@@ -113,6 +114,7 @@ function TilesList(): JSX.Element {
                 type="button"
                 colorScheme="blue"
                 onClick={handleSelect(OBSTACLE)}
+                disabled={entranceLength < 1}
               >
                 Add Obstacle
               </Button>
@@ -120,6 +122,7 @@ function TilesList(): JSX.Element {
                 type="button"
                 colorScheme="blue"
                 onClick={handleSelect(SLOT)}
+                disabled={entranceLength < 1}
               >
                 Add Parking Slot
               </Button>

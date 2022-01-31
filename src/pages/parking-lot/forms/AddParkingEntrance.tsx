@@ -61,6 +61,7 @@ function AddParkingEntrance({
               <div className="w-full flex flex-col space-y-3">
                 {values.tile_ids.map((_dt, index) => (
                   <Field
+                    key={`tile_ids_${index + 1}_name`}
                     label="Entry name"
                     name={`tile_ids.${index}.name`}
                     component={FormInput}

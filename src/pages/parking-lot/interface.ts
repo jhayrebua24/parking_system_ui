@@ -29,4 +29,11 @@ export interface IParkingParams {
   tiles: ITileDetails[];
 }
 
+export type ChunkTileValue = "source" | "destination" | "block" | "open";
+export interface ILocationAndDistance {
+  row: number;
+  dist: number;
+  col: number;
+}
+
 export type MethodType = "ENTRANCE" | "OBSTACLE" | "SLOT" | "default";

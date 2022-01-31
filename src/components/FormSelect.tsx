@@ -45,7 +45,7 @@ function FormSelect({
         defaultValue={field?.value}
         autoComplete="off"
       >
-        <option selected={!field?.value} disabled={field?.value} value="">
+        <option disabled={field?.value} value="">
           {placeholder}
         </option>
         {Children.toArray(
