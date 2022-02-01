@@ -4,6 +4,7 @@ import FormButtons from "components/FormButtons";
 import * as yup from "yup";
 import { Field, Form, Formik } from "formik";
 import FormSelect from "components/FormSelect";
+import { useErrorToast } from "hooks/useCustomToast";
 import { useAddParkingSlots, useGetParkingSlotTypes } from "../hooks";
 import {
   ISlotTypesData,
@@ -40,6 +41,7 @@ function AddParkingSLot({
 }: Props): JSX.Element {
   const [submitForm, isLoading] = useAddParkingSlots(parkingId);
   const [{ data }] = useGetParkingSlotTypes<ISlotTypesData>();
+  const toastError = useErrorToast();
   return (
     <Formik
       initialValues={{
@@ -61,8 +63,8 @@ function AddParkingSLot({
           await submitForm(payload);
           onClose();
           callback();
-        } catch (e) {
-          console.log(e);
+        } catch (err) {
+          toastError(err);
         }
       }}
       validationSchema={validationSchema}

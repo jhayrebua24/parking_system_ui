@@ -40,6 +40,12 @@ function TilesList(): JSX.Element {
     return entranceLength + selectedIds.length >= maxEntryPoint;
   }, [entranceLength, selectedIds, data]);
 
+  const hasParkingSlots = useMemo<boolean>(
+    () =>
+      tilesData?.some((td) => td.is_parking_space || td.slot_details) || false,
+    [tilesData]
+  );
+
   const handleClick: IHandleClick = useMemo(
     () => ({
       [OBSTACLE]: async () => {
@@ -139,7 +145,7 @@ function TilesList(): JSX.Element {
                 type="button"
                 colorScheme="blue"
                 onClick={handleSelect(ENTRANCE)}
-                disabled={isMaxEntryPoint}
+                disabled={isMaxEntryPoint || hasParkingSlots}
               >
                 Add Entrance
               </Button>
@@ -147,7 +153,7 @@ function TilesList(): JSX.Element {
                 type="button"
                 colorScheme="blue"
                 onClick={handleSelect(OBSTACLE)}
-                disabled={entranceLength < 1}
+                disabled={entranceLength < 1 || hasParkingSlots}
               >
                 Add Obstacle
               </Button>

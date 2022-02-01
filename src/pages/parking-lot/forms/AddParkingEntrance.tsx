@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import FormButtons from "components/FormButtons";
 import FormInput from "components/FormInput";
 import * as yup from "yup";
@@ -31,7 +32,6 @@ function AddParkingEntrance({
   callback,
 }: Props): JSX.Element {
   const [submitForm, isLoading] = useAddEntrances(parkingId);
-
   return (
     <Formik
       initialValues={{
@@ -42,7 +42,7 @@ function AddParkingEntrance({
       }}
       onSubmit={async (value) => {
         try {
-          await submitForm(value);
+          //   await submitForm(value);
           onClose();
           callback();
         } catch (_e) {
