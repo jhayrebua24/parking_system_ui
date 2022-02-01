@@ -1,23 +1,20 @@
+/* eslint-disable camelcase */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import FormButtons from "components/FormButtons";
 import * as yup from "yup";
 import { Field, Form, Formik } from "formik";
 import FormSelect from "components/FormSelect";
-import { useAddEntrances, useGetParkingSlotTypes } from "../hooks";
-import { IEntranceDetails, ISlotTypesData, ITileDetails } from "../interface";
+import { useAddParkingSlots, useGetParkingSlotTypes } from "../hooks";
+import {
+  ISlotTypesData,
+  ITileDetails,
+  ITilesEntranceDetails,
+} from "../interface";
 import { formatAndGetDistance } from "../helper";
 
 // validation
 const validationSchema = yup.object().shape({
-  ids: yup
-    .array()
-    .of(
-      yup.object().shape({
-        name: yup.string().max(10).min(0).required().label("Name"),
-        id: yup.number().required(),
-      })
-    )
-    .min(0),
+  parking_slot_type: yup.number().min(1).required().label("Slot type"),
 });
 
 interface Props {
@@ -28,7 +25,7 @@ interface Props {
   callback: () => void;
   onClose: () => void;
   tilesData: ITileDetails[];
-  entranceData: IEntranceDetails[];
+  entranceData: ITilesEntranceDetails[];
 }
 
 function AddParkingSLot({
@@ -41,30 +38,34 @@ function AddParkingSLot({
   height,
   width,
 }: Props): JSX.Element {
-  const [submitForm, isLoading] = useAddEntrances(parkingId);
+  const [submitForm, isLoading] = useAddParkingSlots(parkingId);
   const [{ data }] = useGetParkingSlotTypes<ISlotTypesData>();
   return (
     <Formik
       initialValues={{
         parking_slot_type: "",
       }}
-      onSubmit={async (value) => {
+      onSubmit={async ({ parking_slot_type }) => {
         try {
-          const val = await formatAndGetDistance(
+          const distance = await formatAndGetDistance(
             ids,
             entranceData,
             tilesData,
             width,
             height
           );
-          console.log(val, "qwewq");
-          //   await submitForm(value);
-          //   callback();
-        } catch (_e) {
-          //
-          console.log("catch");
+          const payload = {
+            parking_slot_type,
+            distance,
+          };
+          await submitForm(payload);
+          onClose();
+          callback();
+        } catch (e) {
+          console.log(e);
         }
       }}
+      validationSchema={validationSchema}
     >
       {({ handleSubmit }) => (
         <Form onSubmit={handleSubmit} className="flex flex-col space-y-3">

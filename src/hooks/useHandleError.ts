@@ -15,6 +15,7 @@ const useHandleErrors = (): ((key: any | unknown | DynamicObject) => void) => {
       if (status === 401) toastError(message || "Unauthorized");
       if (status === 400) toastError(message || "Bad Request");
       if (status === 404) toastError(message || "Invalid route");
+      if (status === 403) toastError(message || "Forbidden");
       if (status === 405) toastError(message || "Request is not supported");
       if (status === 500) {
         toastError("Something wrong with the server!");

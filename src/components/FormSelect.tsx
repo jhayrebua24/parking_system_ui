@@ -42,7 +42,6 @@ function FormSelect({
         {...field}
         {...props}
         onChange={field?.onChange}
-        defaultValue={field?.value}
         value={field?.value}
         autoComplete="off"
       >

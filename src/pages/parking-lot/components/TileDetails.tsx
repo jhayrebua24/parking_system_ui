@@ -40,7 +40,16 @@ function TileDetails({
 
   const details = useMemo(() => {
     if (data?.slot_details)
-      return <div className="font-semibold">{data?.slot_details?.size}</div>;
+      return (
+        <div className="font-semibold text-center">
+          {data?.slot_details?.size}
+          <div>
+            {data?.slot_details?.distances
+              ?.map((d) => `[${d.entry},${d.distance}]`)
+              .join(",")}
+          </div>
+        </div>
+      );
     if (data?.is_entrance && data?.entrance_details)
       return (
         <div className="font-semibold">

@@ -37,7 +37,24 @@ export const useAddEntrances = (id: string): IMutate => {
     (payload) => axios.post(`/v1/parking-lot/${id}/entrance`, payload),
     {
       onSuccess: ({ data: { message } }) => {
-        toastSuccess(message || "Successfully added entrance");
+        toastSuccess(message || "Successfully added entrances");
+        query.invalidateQueries(`${PARKING_LOT_DETAILS}/${id}`);
+      },
+      onError,
+    }
+  );
+  return [mutateAsync, isLoading];
+};
+
+export const useAddParkingSlots = (id: string): IMutate => {
+  const toastSuccess = useSuccessToast();
+  const query = useQueryClient();
+  const onError = useHandleErrors();
+  const { mutateAsync, isLoading } = useMutation(
+    (payload) => axios.post(`/v1/parking-lot/${id}/parking-slot`, payload),
+    {
+      onSuccess: ({ data: { message } }) => {
+        toastSuccess(message || "Successfully added parking slots");
         query.invalidateQueries(`${PARKING_LOT_DETAILS}/${id}`);
       },
       onError,

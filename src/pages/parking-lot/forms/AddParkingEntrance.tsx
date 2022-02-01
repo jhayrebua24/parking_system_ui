@@ -14,7 +14,7 @@ const validationSchema = yup.object().shape({
         id: yup.number().required(),
       })
     )
-    .min(0),
+    .min(1),
 });
 
 interface Props {

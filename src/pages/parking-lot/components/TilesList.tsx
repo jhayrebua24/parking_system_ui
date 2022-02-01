@@ -7,7 +7,7 @@ import { useParkingLotContext } from "../context";
 import AddParkingEntrance from "../forms/AddParkingEntrance";
 import AddParkingSLot from "../forms/AddParkingSlot";
 import { useAddObstacles } from "../hooks";
-import { IEntranceDetails } from "../interface";
+import { ITilesEntranceDetails } from "../interface";
 import TileDetails from "./TileDetails";
 
 interface IHandleClick {
@@ -72,14 +72,21 @@ function TilesList(): JSX.Element {
               entranceData={
                 (tilesData
                   ?.filter((td) => td.entrance_details)
-                  .map((td) => td.entrance_details) || []) as IEntranceDetails[]
+                  .map((td) => ({
+                    tile_id: td.id,
+                    ...td.entrance_details,
+                  })) || []) as ITilesEntranceDetails[]
               }
               width={data?.width}
               height={data?.height}
               parkingId={parkingId || ""}
               onClose={close}
               callback={handleCancel}
-              ids={selectedIds}
+              ids={selectedIds.concat(
+                tilesData
+                  ?.filter((td) => td.is_parking_space && td.slot_details)
+                  .map((tl) => tl.id) as number[]
+              )}
             />
           ),
         }),

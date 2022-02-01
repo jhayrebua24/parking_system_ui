@@ -5,13 +5,15 @@ import {
   IFormattedDataDistance,
   ILocationAndDistance,
   ITileDetails,
+  ITilesEntranceDetails,
 } from "./interface";
 
 export const chunkTileData = (
   tiles: ITileDetails[],
   width: number,
   sourceId: number,
-  destinationId: number
+  destinationId: number,
+  slotIds: number[]
 ): Promise<ChunkTileValue[][]> =>
   new Promise((res, rej) => {
     try {
@@ -21,7 +23,8 @@ export const chunkTileData = (
           tile.is_obstacle ||
           tile.is_entrance ||
           tile.is_parking_space ||
-          tile.slot_details?.is_occupied
+          tile.slot_details?.is_occupied ||
+          slotIds.includes(tile.id)
         )
           val = "block";
         if (tile.id === destinationId) val = "destination";
@@ -118,7 +121,7 @@ export const getDistance = async (
 
 export const formatAndGetDistance = async (
   slotIds: number[],
-  entrance: IEntranceDetails[],
+  entrance: ITilesEntranceDetails[],
   tiles: ITileDetails[],
   width: number,
   height: number
@@ -129,7 +132,13 @@ export const formatAndGetDistance = async (
         id,
         entrance_distances: await Promise.all(
           entrance.map(async (ent) => {
-            const chunkedData = await chunkTileData(tiles, width, id, ent.id);
+            const chunkedData = await chunkTileData(
+              tiles,
+              width,
+              id,
+              ent.tile_id,
+              slotIds
+            );
             const distance = await getDistance(chunkedData, height, width);
             return {
               id: ent.id,

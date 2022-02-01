@@ -12,8 +12,12 @@ export interface IFormattedDataDistance {
 }
 
 export interface IEntranceDetails {
-  id: 1;
+  id: number;
   name: string;
+}
+
+export interface ITilesEntranceDetails extends IEntranceDetails {
+  tile_id: number;
 }
 
 export interface ISlotTypes {
@@ -30,6 +34,11 @@ export interface ISlotDetails {
   rate: number;
   is_occupied: boolean;
   transactions: any;
+  distances: {
+    id: number;
+    distance: number;
+    entry: string;
+  }[];
 }
 
 export interface ITileDetails {
