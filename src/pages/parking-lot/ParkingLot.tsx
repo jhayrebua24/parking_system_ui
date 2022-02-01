@@ -18,7 +18,6 @@ function ParkingLot(): JSX.Element {
     isLoading,
     { isRefetching },
   ] = useGetParkingLotDetails<IParkingParams>(parkingId || "");
-
   const tilesData = useMemo(() => tiles || [], [tiles]);
 
   const selectionMethod = useMemo<MethodType>(() => {

@@ -1,9 +1,28 @@
 /* eslint-disable camelcase */
 import { IParkingLotDetails } from "pages/parking-lot-list/interface";
 
+export interface IFormattedEntranceDistance {
+  id: number;
+  name: string;
+  distance: number;
+}
+export interface IFormattedDataDistance {
+  id: number;
+  entrance_distances: IFormattedEntranceDistance[];
+}
+
 export interface IEntranceDetails {
   id: 1;
   name: string;
+}
+
+export interface ISlotTypes {
+  vehicle_size: string;
+  id: number;
+}
+
+export interface ISlotTypesData {
+  data: ISlotTypes[];
 }
 
 export interface ISlotDetails {

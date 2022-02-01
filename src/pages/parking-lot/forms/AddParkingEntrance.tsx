@@ -6,7 +6,7 @@ import { useAddEntrances } from "../hooks";
 
 // validation
 const validationSchema = yup.object().shape({
-  ids: yup
+  tile_ids: yup
     .array()
     .of(
       yup.object().shape({

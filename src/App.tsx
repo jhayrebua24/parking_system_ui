@@ -5,7 +5,7 @@ import { Route, Routes } from "react-router-dom";
 
 function App(): JSX.Element {
   return (
-    <div className="h-screen w-screen flex justify-center items-center">
+    <div className="min-h-screen min-w-screen flex justify-center items-center">
       <div className="flex-grow flex flex-col h-full container mx-auto">
         <ModalProvider>
           <Routes>

@@ -19,6 +19,7 @@ const useHandleErrors = (): ((key: any | unknown | DynamicObject) => void) => {
       if (status === 500) {
         toastError("Something wrong with the server!");
       }
+
       if (status === 422) {
         toastError(
           get(errors, `${get(Object.keys(errors), "0")}`) ||

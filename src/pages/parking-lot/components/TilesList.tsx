@@ -5,7 +5,9 @@ import { Params, useParams } from "react-router-dom";
 import { ENTRANCE, OBSTACLE, SLOT } from "../constants";
 import { useParkingLotContext } from "../context";
 import AddParkingEntrance from "../forms/AddParkingEntrance";
+import AddParkingSLot from "../forms/AddParkingSlot";
 import { useAddObstacles } from "../hooks";
+import { IEntranceDetails } from "../interface";
 import TileDetails from "./TileDetails";
 
 interface IHandleClick {
@@ -62,14 +64,38 @@ function TilesList(): JSX.Element {
           ),
         }),
       [SLOT]: () =>
-        addObstacle({
-          tile_ids: selectedIds,
-        }), // to change
+        openModal({
+          title: `Add Parking Slot`,
+          content: (close) => (
+            <AddParkingSLot
+              tilesData={tilesData || []}
+              entranceData={
+                (tilesData
+                  ?.filter((td) => td.entrance_details)
+                  .map((td) => td.entrance_details) || []) as IEntranceDetails[]
+              }
+              width={data?.width}
+              height={data?.height}
+              parkingId={parkingId || ""}
+              onClose={close}
+              callback={handleCancel}
+              ids={selectedIds}
+            />
+          ),
+        }),
       default: () => {
         handleCancel();
       },
     }),
-    [addObstacle, handleCancel, selectedIds, openModal, parkingId]
+    [
+      addObstacle,
+      selectedIds,
+      handleCancel,
+      openModal,
+      parkingId,
+      tilesData,
+      data,
+    ]
   );
 
   useEffect(() => {
