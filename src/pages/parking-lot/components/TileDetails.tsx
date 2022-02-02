@@ -1,12 +1,15 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable camelcase */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import clsx from "clsx";
 import { useErrorToast } from "hooks/useCustomToast";
 import { useMemo } from "react";
-import { ENTRANCE, OBSTACLE, SLOT } from "../constants";
+import moment from "moment";
+import { useOpenModal } from "hooks/useModal";
+import { ENTRANCE, OBSTACLE } from "../constants";
 import { useParkingLotContext } from "../context";
 import { ITileDetails } from "../interface";
+import UnparkCar from "../forms/UnparkCar";
 
 interface Props {
   data: ITileDetails;
@@ -23,12 +26,14 @@ function TileDetails({
 }: Props): JSX.Element {
   const {
     selectionMethod,
+    data: parkingLotData,
     showSaveButton: isSelecting,
   } = useParkingLotContext();
+  const openModal = useOpenModal();
   const toastError = useErrorToast();
   const className = useMemo(() => {
     if (selectedIds.includes(data?.id))
-      return "bg-indigo-400 hover:bg-indigo-400";
+      return "bg-indigo-400 hover:bg-indigo-500";
     if (data?.slot_details) {
       if (data?.slot_details.is_occupied) return "bg-red-500";
       return "bg-green-500";
@@ -43,12 +48,17 @@ function TileDetails({
       const { slot_details: slotDetails } = data;
       return (
         <div className="font-semibold text-center">
-          {slotDetails?.is_occupied && (
+          {slotDetails?.is_occupied ? (
             <div>
               <p>{slotDetails?.transactions?.plate_number}</p>
-              <p>{slotDetails?.transactions?.datetime_in}</p>
+              <p>
+                {moment(
+                  slotDetails?.transactions?.datetime_in,
+                  "YYYY-MM-DD HH:mm:ss"
+                ).fromNow()}
+              </p>
             </div>
-          )}
+          ) : null}
           {slotDetails?.size} {data?.id}
           <div>
             {slotDetails?.distances
@@ -88,8 +98,26 @@ function TileDetails({
 
   const onClick = (e: React.MouseEvent) => {
     e.preventDefault();
+    const { slot_details } = data;
     if (
-      data?.slot_details ||
+      slot_details &&
+      slot_details?.is_occupied &&
+      slot_details?.transactions
+    ) {
+      openModal({
+        title: "Unpark car",
+        content: (close) => (
+          <UnparkCar
+            parkingId={parkingLotData?.id?.toString()}
+            data={slot_details}
+            onClose={close}
+          />
+        ),
+      });
+    }
+
+    if (
+      slot_details ||
       data?.is_obstacle ||
       !data?.is_open_space ||
       data?.is_entrance ||

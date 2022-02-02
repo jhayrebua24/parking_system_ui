@@ -119,9 +119,8 @@ function ParkACar({ onClose, entraceData, parkingId }: Props): JSX.Element {
             <Checkbox
               onChange={({ target: { checked } }) => {
                 if (checked) {
-                  const currentDate = moment();
-                  setFieldValue("date", currentDate?.format("YYYY-MM-DD"));
-                  setFieldValue("time", currentDate?.format("HH:MM"));
+                  setFieldValue("date", moment().format("YYYY-MM-DD"));
+                  setFieldValue("time", moment().format("HH:MM"));
                   // do something
                 }
                 setFieldValue("useCurrentDateTime", checked);

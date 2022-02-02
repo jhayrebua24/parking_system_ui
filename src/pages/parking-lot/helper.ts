@@ -32,7 +32,7 @@ export const chunkTileData = (
 
         const newValue: any = [...accu];
         const cIndex = Math.floor(index / width);
-        if (!accu[cIndex]) {
+        if (!newValue[cIndex]) {
           newValue[cIndex] = [];
         }
         newValue[cIndex].push(val);

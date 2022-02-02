@@ -95,3 +95,20 @@ export const useParkCar = (id: string): IMutate => {
   );
   return [mutateAsync, isLoading];
 };
+
+export const useUnparkCar = (id: string): IMutationResult => {
+  const toastSuccess = useSuccessToast();
+  const query = useQueryClient();
+  const onError = useHandleErrors();
+  const res = useMutation(
+    (payload) => axios.post(`/v1/parking-lot/${id}/unpark-car`, payload),
+    {
+      onSuccess: ({ data: { message } }) => {
+        toastSuccess(message || "Successfully park a car!");
+        query.invalidateQueries(`${PARKING_LOT_DETAILS}/${id}`);
+      },
+      onError,
+    }
+  );
+  return [res.mutateAsync, res.isLoading, res];
+};

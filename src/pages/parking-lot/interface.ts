@@ -4,6 +4,7 @@ import { IParkingLotDetails } from "pages/parking-lot-list/interface";
 export interface IActiveTransactionDetails {
   plate_number: string;
   datetime_in: string;
+  id: number;
 }
 export interface IFormattedEntranceDistance {
   id: number;
