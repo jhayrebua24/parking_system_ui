@@ -39,17 +39,26 @@ function TileDetails({
   }, [data, selectedIds]);
 
   const details = useMemo(() => {
-    if (data?.slot_details)
+    if (data?.slot_details) {
+      const { slot_details: slotDetails } = data;
       return (
         <div className="font-semibold text-center">
-          {data?.slot_details?.size} {data?.id}
+          {slotDetails?.is_occupied && (
+            <div>
+              <p>{slotDetails?.transactions?.plate_number}</p>
+              <p>{slotDetails?.transactions?.datetime_in}</p>
+            </div>
+          )}
+          {slotDetails?.size} {data?.id}
           <div>
-            {data?.slot_details?.distances
+            {slotDetails?.distances
               ?.map((d) => `[${d.entry},${d.distance}]`)
               .join(",")}
           </div>
         </div>
       );
+    }
+
     if (data?.is_entrance && data?.entrance_details)
       return (
         <div className="font-semibold">

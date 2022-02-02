@@ -3,7 +3,7 @@ import Debug from "components/Debug";
 import FormButtons from "components/FormButtons";
 import FormInput from "components/FormInput";
 import FormSelect from "components/FormSelect";
-import { Field, Formik } from "formik";
+import { Field, Form, Formik } from "formik";
 import get from "lodash/get";
 import moment from "moment";
 import { useMemo } from "react";
@@ -53,17 +53,17 @@ function ParkACar({ onClose, entraceData, parkingId }: Props): JSX.Element {
             await parkCar({
               ...value,
               tile_id: nearestParkingSlot?.tile_id,
+              datetime_in: `${value?.date} ${value?.time}`,
             });
             onClose();
           } catch (_e) {
             // catch error here
           }
-          console.log(value);
         }}
         validationSchema={validationSchema}
       >
-        {({ values, setFieldValue }) => (
-          <div className="flex flex-col space-y-4">
+        {({ values, setFieldValue, handleSubmit }) => (
+          <Form onSubmit={handleSubmit} className="flex flex-col space-y-4">
             <Field
               component={FormSelect}
               label="Entry Point"
@@ -138,7 +138,7 @@ function ParkACar({ onClose, entraceData, parkingId }: Props): JSX.Element {
               disabled={!nearestParkingSlot || isLoading}
             />
             <Debug />
-          </div>
+          </Form>
         )}
       </Formik>
     </div>

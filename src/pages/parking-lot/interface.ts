@@ -1,6 +1,10 @@
 /* eslint-disable camelcase */
 import { IParkingLotDetails } from "pages/parking-lot-list/interface";
 
+export interface IActiveTransactionDetails {
+  plate_number: string;
+  datetime_in: string;
+}
 export interface IFormattedEntranceDistance {
   id: number;
   name: string;
@@ -33,7 +37,7 @@ export interface ISlotDetails {
   size: string;
   rate: number;
   is_occupied: boolean;
-  transactions: any;
+  transactions: IActiveTransactionDetails;
   distances: {
     id: number;
     distance: number;
