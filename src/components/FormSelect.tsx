@@ -20,6 +20,7 @@ interface IFormSelect extends FieldProps {
     label: string | number;
     value: string | number;
   }[];
+  onChangeCallback?: (val: any) => void;
 }
 
 function FormSelect({
@@ -28,6 +29,7 @@ function FormSelect({
   label,
   options,
   placeholder,
+  onChangeCallback,
   ...props
 }: IFormSelect): JSX.Element {
   const { errors, touched } = form;
@@ -41,7 +43,10 @@ function FormSelect({
       <Select
         {...field}
         {...props}
-        onChange={field?.onChange}
+        onChange={(e) => {
+          if (onChangeCallback) onChangeCallback(e?.target?.value);
+          field?.onChange(e);
+        }}
         value={field?.value}
         autoComplete="off"
       >
@@ -61,5 +66,8 @@ FormSelect.defaultProps = {
   type: "text",
   placeholder: "Select",
   label: "",
+  onChangeCallback: () => {
+    //
+  },
 };
 export default FormSelect;

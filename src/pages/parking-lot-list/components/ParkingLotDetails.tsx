@@ -27,8 +27,11 @@ function ParkingLotDetails({ data }: Props): JSX.Element {
           onClick={() =>
             openConfirmation({
               onSubmit: async (close) => {
-                await deleteItem(data?.id);
-                close();
+                try {
+                  await deleteItem(data?.id);
+                } finally {
+                  close();
+                }
               },
             })
           }

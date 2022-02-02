@@ -5,6 +5,7 @@ interface Props {
   submitText?: string;
   onClose: () => void;
   isLoading?: boolean;
+  disabled?: boolean;
 }
 
 function FormButtons({
@@ -12,6 +13,7 @@ function FormButtons({
   submitText,
   onClose,
   isLoading,
+  disabled,
 }: Props): JSX.Element {
   return (
     <HStack width="full" pt={3}>
@@ -27,7 +29,7 @@ function FormButtons({
       <Button
         type="submit"
         isLoading={isLoading}
-        disabled={isLoading}
+        disabled={isLoading || disabled}
         colorScheme="brand"
         width="full"
       >
@@ -41,5 +43,6 @@ FormButtons.defaultProps = {
   cancelText: "Cancel",
   submitText: "Submit",
   isLoading: false,
+  disabled: false,
 };
 export default FormButtons;

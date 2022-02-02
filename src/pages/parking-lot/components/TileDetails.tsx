@@ -42,7 +42,7 @@ function TileDetails({
     if (data?.slot_details)
       return (
         <div className="font-semibold text-center">
-          {data?.slot_details?.size}
+          {data?.slot_details?.size} {data?.id}
           <div>
             {data?.slot_details?.distances
               ?.map((d) => `[${d.entry},${d.distance}]`)
@@ -53,7 +53,7 @@ function TileDetails({
     if (data?.is_entrance && data?.entrance_details)
       return (
         <div className="font-semibold">
-          Entry - {data?.entrance_details?.name}
+          Entry - {data?.entrance_details?.name} {data?.entrance_details?.id}
         </div>
       );
     return null;

@@ -1,5 +1,10 @@
 import axios from "axios";
-import { QueryKey, useQuery, useQueryClient } from "react-query";
+import {
+  QueryKey,
+  QueryObserverOptions,
+  useQuery,
+  useQueryClient,
+} from "react-query";
 import { FetchDataInterface, RequestResponse } from "utils/interface";
 import useHandleErrors from "./useHandleError";
 
@@ -20,10 +25,12 @@ export const useSetQueryData = (
 
 export const useGetQuery = <T>(
   key: QueryKey,
-  url: string
+  url: string,
+  options: QueryObserverOptions = {}
 ): FetchDataInterface<T> => {
   const onError = useHandleErrors();
   const result = useQuery(key, () => axios.get(url), {
+    ...options,
     onError,
   });
   const { data, isLoading } = result;

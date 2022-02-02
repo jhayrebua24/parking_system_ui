@@ -42,7 +42,7 @@ function AddParkingEntrance({
       }}
       onSubmit={async (value) => {
         try {
-          //   await submitForm(value);
+          await submitForm(value);
           onClose();
           callback();
         } catch (_e) {

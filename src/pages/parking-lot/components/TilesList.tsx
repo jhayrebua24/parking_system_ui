@@ -1,11 +1,12 @@
 import { Button } from "@chakra-ui/react";
 import { useOpenModal } from "hooks/useModal";
 import { Children, useEffect, useMemo, useState } from "react";
-import { Params, useParams } from "react-router-dom";
+import { Params, useNavigate, useParams } from "react-router-dom";
 import { ENTRANCE, OBSTACLE, SLOT } from "../constants";
 import { useParkingLotContext } from "../context";
 import AddParkingEntrance from "../forms/AddParkingEntrance";
 import AddParkingSLot from "../forms/AddParkingSlot";
+import ParkACar from "../forms/ParkACar";
 import { useAddObstacles } from "../hooks";
 import { ITilesEntranceDetails } from "../interface";
 import TileDetails from "./TileDetails";
@@ -27,6 +28,7 @@ function TilesList(): JSX.Element {
     handleSelect,
   } = useParkingLotContext();
   const { parkingId } = useParams<Params>();
+  const navigate = useNavigate();
   const openModal = useOpenModal();
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const [addObstacle, loadingAddObstacle] = useAddObstacles(parkingId || "");
@@ -43,6 +45,17 @@ function TilesList(): JSX.Element {
   const hasParkingSlots = useMemo<boolean>(
     () =>
       tilesData?.some((td) => td.is_parking_space || td.slot_details) || false,
+    [tilesData]
+  );
+
+  const entraceData = useMemo(
+    () =>
+      tilesData
+        ?.filter((td) => td.entrance_details)
+        .map((td) => ({
+          tile_id: td.id,
+          ...td.entrance_details,
+        })) as ITilesEntranceDetails[],
     [tilesData]
   );
 
@@ -75,14 +88,7 @@ function TilesList(): JSX.Element {
           content: (close) => (
             <AddParkingSLot
               tilesData={tilesData || []}
-              entranceData={
-                (tilesData
-                  ?.filter((td) => td.entrance_details)
-                  .map((td) => ({
-                    tile_id: td.id,
-                    ...td.entrance_details,
-                  })) || []) as ITilesEntranceDetails[]
-              }
+              entranceData={entraceData}
               width={data?.width}
               height={data?.height}
               parkingId={parkingId || ""}
@@ -101,6 +107,7 @@ function TilesList(): JSX.Element {
       },
     }),
     [
+      entraceData,
       addObstacle,
       selectedIds,
       handleCancel,
@@ -118,6 +125,30 @@ function TilesList(): JSX.Element {
   const onClickSave = handleClick[selectionMethod] || handleClick.default;
   return (
     <>
+      <div className="flex justify-between items-center my-8">
+        <Button type="button" onClick={() => navigate("/")}>
+          Back
+        </Button>
+        <Button
+          type="button"
+          colorScheme="brand"
+          disabled={!hasParkingSlots}
+          onClick={() =>
+            openModal({
+              title: `Park a Car`,
+              content: (close) => (
+                <ParkACar
+                  entraceData={entraceData}
+                  parkingId={parkingId || ""}
+                  onClose={close}
+                />
+              ),
+            })
+          }
+        >
+          Park a Car
+        </Button>
+      </div>
       <div className="flex justify-between items-center">
         <p className="text-xl font-semibold uppercase">{data?.name}</p>
         <div className="flex space-x-2 items-center">
@@ -170,7 +201,7 @@ function TilesList(): JSX.Element {
         </div>
       </div>
       <div
-        className="mt-4 grid"
+        className="mt-4 grid pb-24"
         style={{
           gridTemplateColumns: `repeat(${data?.width}, 1fr)`,
         }}

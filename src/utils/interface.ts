@@ -16,3 +16,4 @@ export interface RequestResponse<T> {
 }
 
 export type IMutate = [(key: any) => Promise<any>, boolean];
+export type IMutationResult = [(key: any) => Promise<any>, boolean, any];

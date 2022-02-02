@@ -1,10 +1,10 @@
 import { DynamicObject } from "utils/interface";
 import get from "lodash/get";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { useErrorToast } from "./useCustomToast";
 
 const useHandleErrors = (): ((key: any | unknown | DynamicObject) => void) => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const toastError = useErrorToast();
   const handleError = (err: DynamicObject): void => {
     if (err?.response) {
@@ -18,7 +18,7 @@ const useHandleErrors = (): ((key: any | unknown | DynamicObject) => void) => {
       if (status === 400) toastError(message || "Bad Request");
       if (status === 404) {
         toastError(message || "Invalid route");
-        navigate("/404");
+        // navigate("/404");
       }
       if (status === 403) toastError(message || "Forbidden");
       if (status === 405) toastError(message || "Request is not supported");
