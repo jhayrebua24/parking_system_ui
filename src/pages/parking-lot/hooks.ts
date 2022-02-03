@@ -101,10 +101,14 @@ export const useUnparkCar = (id: string): IMutationResult => {
   const query = useQueryClient();
   const onError = useHandleErrors();
   const res = useMutation(
-    (payload) => axios.post(`/v1/parking-lot/${id}/unpark-car`, payload),
+    (payload) =>
+      axios.put(
+        `/v1/parking-lot/${id}/unpark-car/${(payload as any)?.txn_id || ""}`,
+        payload
+      ),
     {
       onSuccess: ({ data: { message } }) => {
-        toastSuccess(message || "Successfully park a car!");
+        toastSuccess(message || "Successfully unpark a car!");
         query.invalidateQueries(`${PARKING_LOT_DETAILS}/${id}`);
       },
       onError,

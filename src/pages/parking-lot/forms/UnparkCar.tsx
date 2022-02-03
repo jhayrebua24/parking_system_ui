@@ -1,21 +1,22 @@
 /* eslint-disable radix */
 /* eslint-disable func-names */
 import { Checkbox } from "@chakra-ui/react";
-import Debug from "components/Debug";
 import FormButtons from "components/FormButtons";
 import FormInput from "components/FormInput";
 import { Field, Form, Formik } from "formik";
 import moment from "moment";
 import get from "lodash/get";
 import * as yup from "yup";
-import { useParkCar } from "../hooks";
-import { IActiveTransactionDetails, ISlotDetails } from "../interface";
+import { useUnparkCar } from "../hooks";
+import {
+  IActiveTransactionDetails,
+  ISlotDetails,
+  IUnparkDetails,
+} from "../interface";
+import UnparkDetails from "../components/UnparkDetails";
 
 const validationSchema = (transactions: IActiveTransactionDetails) =>
   yup.object().shape({
-    entry_id: yup.number().required().label("Entry point"),
-    vehicle_type: yup.number().required().label("Vehicle type"),
-    plate_number: yup.string().max(6).required().label("Plate number"),
     date: yup
       .date()
       .min(
@@ -45,26 +46,35 @@ interface Props {
   parkingId: string;
 }
 
-function ParkACar({ onClose, data, parkingId }: Props): JSX.Element {
-  const [parkCar, isLoading] = useParkCar(parkingId);
+function UnparkCar({ onClose, data, parkingId }: Props): JSX.Element {
+  const [unparkCar, isLoading, { data: record }] = useUnparkCar(parkingId);
   const { transactions } = data;
+
+  if (record)
+    return (
+      <UnparkDetails
+        close={onClose}
+        plate={transactions?.plate_number}
+        data={record?.data as IUnparkDetails}
+      />
+    );
   return (
     <div>
       <Formik
         initialValues={{
           txn_id: transactions?.id,
           plate_number: transactions?.plate_number,
+          datetime_in: transactions?.datetime_in,
           date: "",
           time: "",
           useCurrentDateTime: false,
         }}
         onSubmit={async (value) => {
           try {
-            await parkCar({
+            await unparkCar({
               ...value,
               datetime_out: `${value?.date} ${value?.time}`,
             });
-            onClose();
           } catch (_e) {
             // catch error here
           }
@@ -73,10 +83,14 @@ function ParkACar({ onClose, data, parkingId }: Props): JSX.Element {
       >
         {({ values, setFieldValue, handleSubmit }) => (
           <Form onSubmit={handleSubmit} className="flex flex-col space-y-4">
+            <h1 className="font-semibold">
+              ENTRY DATE &amp; TIME: {data?.transactions?.datetime_in}
+            </h1>
             <Field
               component={FormInput}
               name="plate_number"
               label="Plate Number"
+              disabled
             />
             <Field
               type="date"
@@ -109,7 +123,6 @@ function ParkACar({ onClose, data, parkingId }: Props): JSX.Element {
               onClose={onClose}
               disabled={isLoading}
             />
-            <Debug />
           </Form>
         )}
       </Formik>
@@ -117,4 +130,4 @@ function ParkACar({ onClose, data, parkingId }: Props): JSX.Element {
   );
 }
 
-export default ParkACar;
+export default UnparkCar;

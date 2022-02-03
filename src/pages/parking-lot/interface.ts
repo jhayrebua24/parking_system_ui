@@ -1,6 +1,16 @@
 /* eslint-disable camelcase */
 import { IParkingLotDetails } from "pages/parking-lot-list/interface";
 
+export interface IUnparkDetails {
+  message: string;
+  data: {
+    overnight_park: number;
+    total_rate: number;
+    total_hrs: number;
+    total_minutes: number;
+  };
+}
+
 export interface IActiveTransactionDetails {
   plate_number: string;
   datetime_in: string;

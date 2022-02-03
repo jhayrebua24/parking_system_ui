@@ -1,5 +1,4 @@
 import { Checkbox } from "@chakra-ui/react";
-import Debug from "components/Debug";
 import FormButtons from "components/FormButtons";
 import FormInput from "components/FormInput";
 import FormSelect from "components/FormSelect";
@@ -120,7 +119,7 @@ function ParkACar({ onClose, entraceData, parkingId }: Props): JSX.Element {
               onChange={({ target: { checked } }) => {
                 if (checked) {
                   setFieldValue("date", moment().format("YYYY-MM-DD"));
-                  setFieldValue("time", moment().format("HH:MM"));
+                  setFieldValue("time", moment().format("HH:mm"));
                   // do something
                 }
                 setFieldValue("useCurrentDateTime", checked);
@@ -136,7 +135,6 @@ function ParkACar({ onClose, entraceData, parkingId }: Props): JSX.Element {
               onClose={onClose}
               disabled={!nearestParkingSlot || isLoading}
             />
-            <Debug />
           </Form>
         )}
       </Formik>
